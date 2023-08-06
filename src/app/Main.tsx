@@ -1,9 +1,9 @@
 'use client'
 import { ButtonSort } from '@/components/ButtonSort'
 import { CardMovie, MovieProps } from '@/components/CardMovie'
-import { Button } from '@/components/ui/button'
+
 import { getRandomMovies } from '@/utils/randomMovies'
-import { Wand } from 'lucide-react'
+
 import { useState } from 'react'
 
 interface MainProps {
