@@ -4,7 +4,7 @@ import { api } from '@/lib/api'
 export async function getMovie() {
   const randomPage = Math.floor(Math.random() * 100) + 1
   const data = await api
-    .get('trending/movie/day', {
+    .get('movie/popular', {
       params: { page: randomPage, language: 'pt-BR' },
     })
     .then((res) => res.data)

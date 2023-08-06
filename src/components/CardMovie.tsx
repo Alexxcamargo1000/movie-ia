@@ -26,13 +26,14 @@ export function CardMovie(props: MovieProps) {
         {props.title.length < 10 ? props.title : props.title}
       </strong>
 
-      <div className="rounded-lg overflow-hidden w-80 shadow">
+      <div className="rounded-lg overflow-hidden w-80 max-h-[420px] shadow">
         <Image
           alt="movie"
           src={`https://image.tmdb.org/t/p/w500${props.poster_path}`}
           width={500}
+          className="object-cover w-80 max-h-[420px]"
           height={500}
-          priority
+          quality={100}
         />
       </div>
 
@@ -47,7 +48,7 @@ export function CardMovie(props: MovieProps) {
         </div>
       </div>
 
-      <div>
+      <div className="min-h-[60px]">
         <p className="mt-4 text-sm text-zinc-100">{overview}</p>
       </div>
 
