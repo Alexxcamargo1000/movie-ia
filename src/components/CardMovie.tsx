@@ -1,6 +1,10 @@
+'use client'
 import { Clock, CalendarDays, PlayCircle } from 'lucide-react'
 import { Button } from './ui/button'
 import Image from 'next/image'
+import { api } from '@/lib/api'
+import { useState } from 'react'
+import { useToast } from './ui/use-toast'
 
 export interface MovieProps {
   id: number
@@ -12,6 +16,42 @@ export interface MovieProps {
 }
 
 export function CardMovie(props: MovieProps) {
+  const [isLoading, setIsLoading] = useState(false)
+  const { toast } = useToast()
+
+  async function handleTrailer() {
+    setIsLoading(true)
+    const video = await api
+      .get(`movie/${props.id}/videos`, {
+        params: { language: 'pt-BR' },
+        headers: {
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
+        },
+      })
+      .then((res) => res.data)
+
+    setIsLoading(false)
+    if (video.results.length === 0) {
+      toast({
+        title: 'Trailer não encontrado',
+        variant: 'destructive',
+      })
+      return
+    }
+
+    const videoKey: string = video.results[0].key
+
+    if (!videoKey) {
+      toast({
+        title: 'Trailer não encontrado',
+        variant: 'destructive',
+      })
+      return
+    }
+
+    window.open(`https://www.youtube.com/watch?v=${videoKey}`, '_blank')
+  }
+
   const overview =
     props.overview.length > 100
       ? props.overview.substring(0, 100) + '...'
@@ -52,7 +92,11 @@ export function CardMovie(props: MovieProps) {
         <p className="mt-4 text-sm text-zinc-100">{overview}</p>
       </div>
 
-      <Button className="w-full bg-emerald-800 hover:bg-emerald-700 mt-6">
+      <Button
+        disabled={isLoading}
+        onClick={handleTrailer}
+        className="w-full bg-emerald-800 hover:bg-emerald-700 mt-6"
+      >
         <PlayCircle className="mr-3" />
         Trailer
       </Button>
